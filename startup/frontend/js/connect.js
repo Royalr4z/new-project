@@ -12,7 +12,6 @@ async function connectUser() {
         }
     };
     
-    
 
     await fetch('http://localhost:4000/signin', options)
         .then(response => response.json())
@@ -29,7 +28,7 @@ async function connectUser() {
             ErrorMsg.classList.add('d-none');
 
             setTimeout(() => {
-                window.location.href = '../index.html';
+                window.location.href = '../admin/blogCreation.html';
               }, 1500);
         })
         .catch(error => {

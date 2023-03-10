@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt-nodejs')
 
 module.exports = app => {
-    const { existsOrError, notExistsOrError, equalsOrError } = app.api.validation
+    const { existsOrError, notExistsOrError, equalsOrError, validateEmail} = app.api.validation
 
     const encryptPassword = password => {
         const salt = bcrypt.genSaltSync(10)
@@ -23,7 +23,8 @@ module.exports = app => {
                 'Confirme sua Senha')
             equalsOrError(user.password, user.confirmPassword,
                 'Senhas não conferem')
-
+            validateEmail(user.email, 'E-mail Inválido!')
+            
             const userFromDB = await app.db('users')
                 .where({ email: user.email }).first()
             if(!user.id) {
@@ -54,7 +55,6 @@ module.exports = app => {
     const get = (req, res) => {
         app.db('users')
             .select('id', 'name', 'email', 'admin')
-            .whereNull('deletedAt')
             .then(users => res.json(users))
             .catch(err => res.status(500).send(err))
     }
@@ -63,7 +63,6 @@ module.exports = app => {
         app.db('users')
             .select('id', 'name', 'email', 'admin')
             .where({ id: req.params.id })
-            .whereNull('deletedAt')
             .first()
             .then(user => res.json(user))
             .catch(err => res.status(500).send(err))

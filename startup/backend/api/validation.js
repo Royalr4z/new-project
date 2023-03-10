@@ -9,7 +9,7 @@ module.exports = app => {
         try {
             existsOrError(value, msg)
         } catch(msg) {
-            return
+            return 
         }
         throw msg
     }
@@ -18,5 +18,12 @@ module.exports = app => {
         if(valueA !== valueB) throw msg
     }
 
-    return { existsOrError, notExistsOrError, equalsOrError }
+    function validateEmail(email, msg) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!regex.test(email)) {
+            throw msg;
+        }
+      }
+
+    return { existsOrError, notExistsOrError, equalsOrError, validateEmail }
 }
